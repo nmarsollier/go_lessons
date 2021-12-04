@@ -48,7 +48,7 @@ go run hello.go
 
 - Generalmente mantenemos un solo workspace GOPATH
 - Dentro de ese workspace se incluyen muchos repositorios (git por ejemplo)
-- Dentro de cara repositorio organizamos nuestro código en paquetes.
+- Dentro de cada repositorio organizamos nuestro código en paquetes.
 - Los paquetes son directorios, el nombre del paquete es el nombre del ultimo directorio
 - Normalmente no son muchos directorios, es una estructura bastante plana
 
@@ -72,7 +72,8 @@ Este comando lo podemos ejecutar desde cualquier directorio, go busca en el work
 
 ### Imports
 
-Supongamos la siguiente librería en GOPATH/src/github.com/user/test/stringutil/reverse.go
+Supongamos la siguiente librería en 
+GOPATH/src/github.com/user/test/stringutil/reverse.go
 
 ``` go
 // El paquete es el nombre del directorio
@@ -88,7 +89,8 @@ func Reverse(s string) string {
 }
 ```
 
-Ahora modifiquemos nuestro hello $GOPATH/src/github.com/user/test/hello):
+Ahora modifiquemos nuestro hello 
+$GOPATH/src/github.com/user/test/hello):
 
 ``` go
 package main
@@ -151,7 +153,6 @@ Las librerías en vez de ser descargadas dentro de GOPATH/src son descargadas en
 
 
 En general go trabaja bastante bien con mod, pero a veces cuando usamos librerias que no esan preparadas o suficientemente maduras conviene usar mod vendoring, para crear copias locales de las libs en la carpeta vendor
-
 
 ### El lenguaje de programación GO
 
@@ -410,13 +411,13 @@ func Contents(filename string) (string, error) {
     buf := make([]byte, 100)
     for {
         n, err := f.Read(buf[0:])
-        result = append(result, buf[0:n]...) // append is discussed later.
         if err != nil {
             if err == io.EOF {
                 break
             }
             return "", err
         }
+        result = append(result, buf[:n]...) // append is discussed later.
     }
     return string(result), nil
 }
@@ -452,7 +453,7 @@ type Vertex struct {
 }
 
 // Simple definicion de una variable nos hace una instancia nueva
-var newV Vertex
+var datoV Vertex
 
 // podemos proveer los valores de inicialización
 v := Vertex{1, 2}
@@ -469,10 +470,14 @@ p.X = 2
 // var nos permite definir una variable sin asignarle un valor
 var p *Vertex
 p = new(Vertex)  // *Vertex
+p = &Vertex{X:1}
+p = nil
 
 d := new(Vertex)  //  *Vertex
 
 v := *d  // Vertex, pero cuidado porque al ser una estructura la asignacion genera una copia del dato, y no es el dato mismo
+
+c := v
 
 ```
 
@@ -480,15 +485,6 @@ La ventaja de usar punteros es la posibilidad de pasar estructuras por referenci
 Go se maneja por valor, si pasamos una estructura nos pasa un copia de la misma, no la estructura original. Si queremos pasar por referencia, debemos usar punteros.
 Ademas, con punteros podemos analizar la posibilidad de retornar nil.
 Las variables de algún tipo de estructura no pueden ser nil, pero los punteros a esas estructuras si.
-
-__make__
-
-Make sirve para inicializar arrays de valores. Los valores dentro del array
-
-```
-var v  []int = make([]int, 100) // inicializa un arreglo de 100 int
-var p *[]int = new([]int)       // es un arreglo de punteros a int, los punteros están en nil
-```
 
 #### Arrays
 
@@ -517,6 +513,15 @@ func Sum(a *[3]float64) (sum float64) {
 
 x := Sum(&array)  // Para pasar el puntero necesitamos obtener la dirección
 
+```
+
+__make__
+
+Make sirve para inicializar arrays de valores. Los valores dentro del array
+
+```
+var v  []int = make([]int, 100) // inicializa un arreglo de 100 int
+var p *[]int = new([5]int)       // es un arreglo de punteros a int, los punteros están en nil
 ```
 
 #### Slices
